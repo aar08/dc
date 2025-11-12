@@ -1,0 +1,12 @@
+clc; Symbols = {'x1','x2','x3','x4','x5','x6'};
+p = [0.4 0.20 0.10 0.30 0.20 0.45];   % sum = 1.5
+if sum(p) ~= 1
+    disp('Probabilities do not sum to 1. Normalizing...');
+    p = p / sum(p);
+else
+    disp('Probabilities are already normalized.');
+end
+dict = huffmandict(Symbols,p);
+sig = {'x1','x2','x3','x4','x5','x6'}; hcode = huffmanenco(sig,dict);
+dhsig = huffmandeco(hcode,dict);
+disp(dict), disp(hcode), disp(dhsig);
