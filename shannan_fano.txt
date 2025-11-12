@@ -1,0 +1,28 @@
+function shannon_fano_user()
+    symbols = input('Enter symbols as a char array (e.g. ''ABCDE''): ');
+    prob = input('Enter probabilities as an array (e.g. [0.4 0.2 0.2 0.1 0.1]): ');
+    [prob, idx] = sort(prob,'descend');
+    symbols = symbols(idx);
+    codes = repmat({''}, size(symbols));
+    codes = shannon_fano(prob, codes, 1, numel(prob));
+    disp('Symbol   Probability   Code');
+    for i = 1:numel(symbols)
+        fprintf('  %c       %.3f        %s\n', symbols(i), prob(i), codes{i});
+    end
+end
+function codes = shannon_fano(prob, codes, l, r)
+    if l >= r, return; end
+    total = sum(prob(l:r));
+    acc = 0; split = l;
+    for i = l:r
+        acc = acc + prob(i);
+        if acc >= total/2
+            split = i;
+            break;
+        end
+    end
+    for i = l:split, codes{i} = [codes{i} '0']; end
+    for i = split+1:r, codes{i} = [codes{i} '1']; end
+    codes = shannon_fano(prob, codes, l, split);
+    codes = shannon_fano(prob, codes, split+1, r);
+end
